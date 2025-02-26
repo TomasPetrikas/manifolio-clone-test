@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
+import './ManifoldCalculator.css';
 
 const ManifoldCalculator = () => {
   // State variables
@@ -211,137 +212,138 @@ const ManifoldCalculator = () => {
     // This would integrate with the actual Manifold API to place bets
     alert('Bet placement functionality would require API integration with your authorization.');
   };
-  
+
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <header className="text-center mb-6">
-        <h1 className="text-3xl font-bold text-indigo-800">Manifolio</h1>
-        <p className="text-gray-600">Bet size calculator for Manifold, based on Kelly criterion</p>
-        <div className="border-t border-b border-gray-200 my-4"></div>
+    <div className="calculator-container">
+      <header className="header">
+        <h1>Manifolio</h1>
+        <p>Bet size calculator for Manifold, based on Kelly criterion</p>
+        <div className="divider"></div>
       </header>
       
-      <div className="space-y-6">
+      <div className="section">
         {/* User Section */}
-        <div className="space-y-2">
-          <h2 className="text-xl font-semibold">User</h2>
-          <div className="flex items-center space-x-2">
+        <div className="section">
+          <h2 className="section-title">User</h2>
+          <div className="input-group">
             <input
               type="text"
               value={userUrl}
               onChange={(e) => setUserUrl(e.target.value)}
               placeholder="https://manifold.markets/Username"
-              className="flex-1 p-2 border border-gray-300 rounded"
+              className="text-input"
             />
             <button 
               onClick={fetchUserData}
-              className="bg-indigo-600 text-white p-2 rounded"
+              className="search-button"
               disabled={userLoading}
             >
               <Search size={20} />
             </button>
           </div>
-          {userError && <p className="text-red-500 text-sm">{userError}</p>}
+          {userError && <p className="error-text">{userError}</p>}
           
-          <div className="flex items-center space-x-4 mt-2">
-            <div className="w-16 h-16 bg-indigo-100 flex items-center justify-center rounded-lg">
-              <svg className="w-10 h-10 text-indigo-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div className="info-display">
+            <div className="icon-container">
+              <svg className="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 12L3 4L7 14L12 12ZM12 12L21 4L17 14L12 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 <path d="M12 12L12 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <div className="space-y-1">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Balance:</span>
-                <span className="font-medium">
+            <div className="info-list">
+              <div className="info-item">
+                <span className="info-label">Balance:</span>
+                <span className="info-value">
                   {userData ? `M$${userData.balance.toFixed(2)}` : 'M$—'}
                 </span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Total loans:</span>
-                <span className="font-medium">M$—</span>
+              <div className="info-item">
+                <span className="info-label">Total loans:</span>
+                <span className="info-value">M$—</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Portfolio value:</span>
-                <span className="font-medium">M$—</span>
+              <div className="info-item">
+                <span className="info-label">Portfolio value:</span>
+                <span className="info-value">M$—</span>
               </div>
             </div>
           </div>
         </div>
         
         {/* Market Section */}
-        <div className="space-y-2">
-          <h2 className="text-xl font-semibold">Market</h2>
-          <div className="flex items-center space-x-2">
+        <div className="section">
+          <h2 className="section-title">Market</h2>
+          <div className="input-group">
             <input
               type="text"
               value={marketUrl}
               onChange={(e) => setMarketUrl(e.target.value)}
               placeholder="https://manifold.markets/User/market-slug"
-              className="flex-1 p-2 border border-gray-300 rounded"
+              className="text-input"
             />
             <button 
               onClick={fetchMarketData}
-              className="bg-indigo-600 text-white p-2 rounded"
+              className="search-button"
               disabled={marketLoading}
             >
               <Search size={20} />
             </button>
           </div>
-          {marketError && <p className="text-red-500 text-sm">{marketError}</p>}
+          {marketError && <p className="error-text">{marketError}</p>}
           
-          <div className="flex items-center space-x-4 mt-2">
-            <div className="w-16 h-16 bg-indigo-100 flex items-center justify-center rounded-lg">
-              <svg className="w-10 h-10 text-indigo-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div className="info-display">
+            <div className="icon-container">
+              <svg className="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 12L3 4L7 14L12 12ZM12 12L21 4L17 14L12 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 <path d="M12 12L12 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <div className="space-y-1">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Market probability:</span>
-                <span className="font-medium">
+            <div className="info-list">
+              <div className="info-item">
+                <span className="info-label">Market probability:</span>
+                <span className="info-value">
                   {marketData ? `${(marketData.probability * 100).toFixed(1)}%` : '—'}
                 </span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Your position:</span>
-                <span className="font-medium">—</span>
+              <div className="info-item">
+                <span className="info-label">Your position:</span>
+                <span className="info-value">—</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Est. time to resolution:</span>
-                <span className="font-medium">—</span>
+              <div className="info-item">
+                <span className="info-label">Est. time to resolution:</span>
+                <span className="info-value">—</span>
               </div>
             </div>
           </div>
         </div>
         
         {/* Probability Estimate */}
-        <div className="space-y-2">
-          <h2 className="text-xl font-semibold">Probability estimate (%)</h2>
+        <div className="section">
+          <h2 className="section-title">Probability estimate (%)</h2>
           <input
             type="number"
             value={probabilityEstimate}
             onChange={(e) => setProbabilityEstimate(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
             min="0"
             max="100"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="text-input"
+            style={{ width: '100%' }}
           />
         </div>
         
         {/* Recommendation */}
-        <div className="space-y-2">
-          <h2 className="text-xl font-semibold">Recommended bet:</h2>
-          <div className="flex justify-between">
-            <span className="text-gray-600">Expected return of this bet on it's own:</span>
-            <span className="font-medium">
+        <div className="section">
+          <h2 className="section-title">Recommended bet:</h2>
+          <div className="info-item">
+            <span className="info-label">Expected return of this bet on it's own:</span>
+            <span className="info-value">
               {recommendation.bet > 0 
                 ? `M$${recommendation.expectedReturn.toFixed(2)}` 
                 : '—'}
             </span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-gray-600">Expected growth in entire portfolio due to this bet:</span>
-            <span className="font-medium">
+          <div className="info-item">
+            <span className="info-label">Expected growth in entire portfolio due to this bet:</span>
+            <span className="info-value">
               {recommendation.bet > 0 
                 ? `${recommendation.portfolioGrowth.toFixed(2)}%` 
                 : '—'}
@@ -350,74 +352,65 @@ const ManifoldCalculator = () => {
         </div>
         
         {/* Bet Placement */}
-        <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
-          <div className="flex items-center space-x-2 mb-4">
-            <span className="font-medium">M$</span>
+        <div className="bet-container">
+          <div className="bet-input-group">
+            <span className="info-value">M$</span>
             <input
               type="number"
-              className="flex-1 p-2 border border-gray-300 rounded"
+              className="text-input"
               value={recommendation.bet}
               readOnly
+              style={{ flex: 1 }}
             />
-            <span className="font-medium">on</span>
+            <span className="info-value">on</span>
             <button 
-              className={`px-4 py-2 rounded font-medium ${
-                recommendation.direction === 'YES' 
-                  ? 'bg-teal-500 text-white' 
-                  : 'bg-gray-200 text-gray-700'
-              }`}
+              className={recommendation.direction === 'YES' ? 'yes-button' : 'inactive-button'}
             >
               YES
             </button>
             <button 
-              className={`px-4 py-2 rounded font-medium ${
-                recommendation.direction === 'NO' 
-                  ? 'bg-red-500 text-white' 
-                  : 'bg-gray-200 text-gray-700'
-              }`}
+              className={recommendation.direction === 'NO' ? 'no-button' : 'inactive-button'}
             >
               NO
             </button>
           </div>
           
-          <div className="space-y-2 mb-4">
-            <div className="flex justify-between">
-              <span className="text-gray-600">Payout if {recommendation.direction}:</span>
-              <span className="font-medium">
-                {recommendation.bet > 0 
-                  ? `M$${recommendation.payout.toFixed(2)}` 
-                  : 'M$0'}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">New probability:</span>
-              <span className="font-medium">
-                {recommendation.bet > 0 
-                  ? `${(recommendation.newProbability * 100).toFixed(1)}% (${
-                      (recommendation.newProbability - (marketData?.probability || 0)) * 100 > 0 
-                        ? '+' 
-                        : ''
-                    }${((recommendation.newProbability - (marketData?.probability || 0)) * 100).toFixed(1)}%)` 
-                  : '0.0% (+0.0%)'}
-              </span>
-            </div>
+          <div className="info-item">
+            <span className="info-label">Payout if {recommendation.direction || 'YES/NO'}:</span>
+            <span className="info-value">
+              {recommendation.bet > 0 
+                ? `M$${recommendation.payout.toFixed(2)}` 
+                : 'M$0'}
+            </span>
+          </div>
+          <div className="info-item" style={{ marginBottom: '1rem' }}>
+            <span className="info-label">New probability:</span>
+            <span className="info-value">
+              {recommendation.bet > 0 
+                ? `${(recommendation.newProbability * 100).toFixed(1)}% (${
+                    (recommendation.newProbability - (marketData?.probability || 0)) * 100 > 0 
+                      ? '+' 
+                      : ''
+                  }${((recommendation.newProbability - (marketData?.probability || 0)) * 100).toFixed(1)}%)` 
+                : '0.0% (+0.0%)'}
+            </span>
           </div>
           
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600">API key (found here)</span>
+          <div>
+            <div className="info-item">
+              <span className="info-label">API key (found here)</span>
             </div>
             <input
               type="password"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="api-key-input"
               placeholder="e.g. 737317fd-01c5-4318-a21b-8ae7cb24caa7"
             />
             <button
               onClick={handlePlaceBet}
               disabled={!recommendation.bet || !apiKey}
-              className="w-full py-2 bg-gray-200 text-gray-700 rounded font-medium hover:bg-gray-300 disabled:opacity-50"
+              className="place-bet-button"
             >
               PLACE BET
             </button>
@@ -426,16 +419,14 @@ const ManifoldCalculator = () => {
         
         {/* Advanced Options */}
         <div>
-          <details className="group">
-            <summary className="flex items-center cursor-pointer">
-              <span className="text-gray-700 font-medium">▼ Advanced options</span>
-            </summary>
-            <div className="mt-4 space-y-4">
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Deferral factor (%)</span>
+          <details className="advanced-options">
+            <summary className="section-title">▼ Advanced options</summary>
+            <div className="options-content">
+              <div className="section">
+                <div className="info-item">
+                  <span className="info-label">Deferral factor (%)</span>
                 </div>
-                <p className="text-xs text-gray-500 italic">
+                <p className="helper-text">
                   A lower value means you are deferring to the market more, so taking less risk. This is equivalent to "fractional kelly betting"
                 </p>
                 <input
@@ -444,14 +435,15 @@ const ManifoldCalculator = () => {
                   onChange={(e) => setFractionalKelly(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
                   min="0"
                   max="100"
-                  className="w-full p-2 border border-gray-300 rounded"
+                  className="text-input"
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Mana overdraft</span>
+              <div className="section">
+                <div className="info-item">
+                  <span className="info-label">Mana overdraft</span>
                 </div>
-                <p className="text-xs text-gray-500 italic">
+                <p className="helper-text">
                   How negative you are willing to let your balance go in the worst case scenario
                 </p>
                 <input
@@ -459,7 +451,8 @@ const ManifoldCalculator = () => {
                   value={manaOverdraft}
                   onChange={(e) => setManaOverdraft(Math.max(0, parseFloat(e.target.value) || 0))}
                   min="0"
-                  className="w-full p-2 border border-gray-300 rounded"
+                  className="text-input"
+                  style={{ width: '100%' }}
                 />
               </div>
             </div>
