@@ -31,6 +31,45 @@ const ManifoldCalculator = () => {
     payout: 0
   });
   
+  // Load saved data from localStorage on component mount
+  useEffect(() => {
+    // Load saved URLs from localStorage
+    const savedUserUrl = localStorage.getItem('manifolio-user-url');
+    const savedMarketUrl = localStorage.getItem('manifolio-market-url');
+    const savedApiKey = localStorage.getItem('manifolio-api-key');
+    
+    if (savedUserUrl) setUserUrl(savedUserUrl);
+    if (savedMarketUrl) setMarketUrl(savedMarketUrl);
+    if (savedApiKey) setApiKey(savedApiKey);
+    
+    // Fetch data if URLs are available
+    if (savedUserUrl) {
+      setTimeout(() => fetchUserData(savedUserUrl), 100);
+    }
+    if (savedMarketUrl) {
+      setTimeout(() => fetchMarketData(savedMarketUrl), 100);
+    }
+  }, []);
+  
+  // Save URLs to localStorage when they change
+  useEffect(() => {
+    if (userUrl) {
+      localStorage.setItem('manifolio-user-url', userUrl);
+    }
+  }, [userUrl]);
+  
+  useEffect(() => {
+    if (marketUrl) {
+      localStorage.setItem('manifolio-market-url', marketUrl);
+    }
+  }, [marketUrl]);
+  
+  useEffect(() => {
+    if (apiKey) {
+      localStorage.setItem('manifolio-api-key', apiKey);
+    }
+  }, [apiKey]);
+  
   // Extract IDs from URLs
   const extractUsername = (url) => {
     if (!url) return null;
@@ -45,8 +84,8 @@ const ManifoldCalculator = () => {
   };
   
   // Fetch user data
-  const fetchUserData = async () => {
-    const username = extractUsername(userUrl);
+  const fetchUserData = async (urlToFetch = userUrl) => {
+    const username = extractUsername(urlToFetch);
     if (!username) {
       setUserError('Invalid Manifold user URL');
       setUserData(null);
@@ -85,8 +124,8 @@ const ManifoldCalculator = () => {
   };
   
   // Fetch market data
-  const fetchMarketData = async () => {
-    const slug = extractMarketSlug(marketUrl);
+  const fetchMarketData = async (urlToFetch = marketUrl) => {
+    const slug = extractMarketSlug(urlToFetch);
     if (!slug) {
       setMarketError('Invalid Manifold market URL');
       setMarketData(null);
@@ -212,6 +251,27 @@ const ManifoldCalculator = () => {
     // This would integrate with the actual Manifold API to place bets
     alert('Bet placement functionality would require API integration with your authorization.');
   };
+  
+  // Handle URL change with auto-fetch
+  const handleUserUrlChange = (e) => {
+    const newUrl = e.target.value;
+    setUserUrl(newUrl);
+    
+    // Optional: Auto-fetch on paste
+    if (newUrl.includes('manifold.markets/') && newUrl !== userUrl) {
+      fetchUserData(newUrl);
+    }
+  };
+  
+  const handleMarketUrlChange = (e) => {
+    const newUrl = e.target.value;
+    setMarketUrl(newUrl);
+    
+    // Optional: Auto-fetch on paste
+    if (newUrl.includes('manifold.markets/') && newUrl.includes('/') && newUrl !== marketUrl) {
+      fetchMarketData(newUrl);
+    }
+  };
 
   return (
     <div className="calculator-container">
@@ -229,12 +289,12 @@ const ManifoldCalculator = () => {
             <input
               type="text"
               value={userUrl}
-              onChange={(e) => setUserUrl(e.target.value)}
+              onChange={handleUserUrlChange}
               placeholder="https://manifold.markets/Username"
               className="text-input"
             />
             <button 
-              onClick={fetchUserData}
+              onClick={() => fetchUserData()}
               className="search-button"
               disabled={userLoading}
             >
@@ -276,12 +336,12 @@ const ManifoldCalculator = () => {
             <input
               type="text"
               value={marketUrl}
-              onChange={(e) => setMarketUrl(e.target.value)}
+              onChange={handleMarketUrlChange}
               placeholder="https://manifold.markets/User/market-slug"
               className="text-input"
             />
             <button 
-              onClick={fetchMarketData}
+              onClick={() => fetchMarketData()}
               className="search-button"
               disabled={marketLoading}
             >
